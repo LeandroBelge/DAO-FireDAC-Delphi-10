@@ -40,7 +40,6 @@ type
     procedure CancelaTransacao;
     function getConsulta(const QueryStr: string): TFDQuery;
     function getProcedimento(const NomeProc: string): TFDStoredProc;
-    function getComando: TFDCommand;
   end;
 implementation
 
@@ -109,13 +108,6 @@ end;
 procedure TDAOPrincipal.DoAlert(ASender: TFDCustomEventAlerter; const AEventName: String; const AArgument: Variant);
 begin
 //  if CompareText(AEventName, 'Customers') = 0 then qryCustomers.Refresh;
-end;
-
-function TDAOPrincipal.getComando: TFDCommand;
-begin
-  Result := TFDCommand.Create(nil);
-  Result.Connection := FConexao;
-  Result.Prepare();
 end;
 
 function TDAOPrincipal.getConsulta(const QueryStr: string): TFDQuery;
