@@ -11,7 +11,6 @@ uses
   FireDAC.Stan.Pool,
   FireDAC.Stan.Async,
   FireDAC.Phys,
-  Data.DB,
   FireDAC.Comp.Client,
   FireDAC.Phys.IBBase,
   FireDAC.Phys.IB,
@@ -21,7 +20,10 @@ uses
   FireDAC.DApt.Intf,
   FireDAC.VCLUI.Wait,
   FireDAC.Comp.UI,
-  FireDAC.DApt;
+  FireDAC.DApt,
+  System.Generics.Collections,
+  Data.DB,
+  ClsOrigemDados;
 type
   TDAOPrincipal = class
   private
@@ -29,22 +31,26 @@ type
     FConexao: TFDConnection;
     FTransacao: TFDTransaction;
     FEventosBD: TFDEventAlerter;
-    procedure DoAlert(ASender: TFDCustomEventAlerter; const AEventName: String; const AArgument: Variant);
+    FOrigensDados: TList<TOrigemDados>;
+    procedure DoAlert(ASender: TFDCustomEventAlerter; const NomeEvento: String; const AArgument: Variant);
     function getStringConection: string;
   public
     constructor Create(const PathDataBase: string);
+    destructor Destroy; override;
     procedure Conectar;
     procedure Desconectar;
     procedure AssociaTransacao;
     procedure ConfirmaTransacao;
     procedure CancelaTransacao;
+    function NovaOrigemDados(const NomeOrigem, SQLOriginal, Filtros, Ordem: string): TDataSource;
+
     function getConsulta(const QueryStr: string): TFDQuery;
     function getProcedimento(const NomeProc: string): TFDStoredProc;
   end;
 implementation
 
 uses
-  System.SysUtils;
+  System.SysUtils, Vcl.Forms;
 
 { TDAOPrincipal }
 
@@ -97,17 +103,34 @@ end;
 constructor TDAOPrincipal.Create(const PathDataBase: string);
 begin
   FPathDataBase := PathDataBase;
+  FOrigensDados := TList<TOrigemDados>.Create;
 end;
 
 procedure TDAOPrincipal.Desconectar;
 begin
-  self.FConexao.Connected := false;
-  self.FConexao.Close;
+  if self.FConexao.Connected then begin
+    self.FConexao.Connected := false;
+    self.FConexao.Close;
+  end;
 end;
 
-procedure TDAOPrincipal.DoAlert(ASender: TFDCustomEventAlerter; const AEventName: String; const AArgument: Variant);
+destructor TDAOPrincipal.Destroy;
 begin
-//  if CompareText(AEventName, 'Customers') = 0 then qryCustomers.Refresh;
+  FOrigensDados.Free;
+  self.Desconectar;
+  inherited;
+end;
+
+procedure TDAOPrincipal.DoAlert(ASender: TFDCustomEventAlerter; const NomeEvento: String; const AArgument: Variant);
+var
+  Origem: TOrigemDados;
+begin
+  if not Assigned(FOrigensDados) then exit;
+  for Origem in FOrigensDados do begin
+    if CompareText(NomeEvento, Origem.Nome) = 0 then begin
+      Origem.Refresh(NomeEvento);
+    end;
+  end;
 end;
 
 function TDAOPrincipal.getConsulta(const QueryStr: string): TFDQuery;
@@ -134,6 +157,40 @@ begin
             ' DriverID=IB; '+
             ' Protocol=TCPIP; '+
             ' Server=localhost;';
+end;
+
+function TDAOPrincipal.NovaOrigemDados(const NomeOrigem, SQLOriginal, Filtros, Ordem: string): TDataSource;
+var
+  OrigemDados: TOrigemDados;
+begin
+  try
+    if not FConexao.Connected then exit;
+    OrigemDados := TOrigemDados.Create(NomeOrigem);
+    //Seta alguns parâmetros da Origem
+    OrigemDados.SQLOriginal := SQLOriginal;
+    OrigemDados.Filtros := Filtros;
+    OrigemDados.Ordem := Ordem;
+    OrigemDados.Consulta.Connection := FConexao;
+    OrigemDados.Consulta.FetchOptions.CursorKind := ckDynamic;
+    OrigemDados.Consulta.FetchOptions.Unidirectional := true;
+    OrigemDados.Consulta.FetchOptions.Mode := fmOnDemand;
+    OrigemDados.Consulta.FetchOptions.RowsetSize := 50;
+    OrigemDados.Consulta.FetchOptions.Items := [fiDetails];
+    OrigemDados.Consulta.FetchOptions.AutoClose := false;
+    OrigemDados.AtualizaOrigem;
+    FOrigensDados.Add(OrigemDados);
+    Result := OrigemDados.FonteDados;
+  except
+    on E: Exception do begin
+      if ((Copy(E.Message, 1, 26) = 'Unable to complete network')
+        or (E.Message = 'Cannot perform operation -- DB is not open')
+        or (E.Message = 'connection lost to database')
+        or (E.Message = 'Error writing data to the connection')) then begin
+//        Self.NotificaQuedaConexao;
+        Application.Terminate;
+      end;
+    end;
+  end;
 end;
 
 end.

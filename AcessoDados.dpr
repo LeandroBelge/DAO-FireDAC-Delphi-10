@@ -6,12 +6,19 @@ program AcessoDados;
 
 uses
   ClsDAOPrincipal in 'ClsDAOPrincipal.pas',
-  FireDAC.Comp.Client, System.Variants,
-  System.Classes, System.SysUtils;
+  FireDAC.Comp.Client,
+  System.Variants,
+  System.Classes,
+  System.SysUtils,
+  UntUITelaTeste in 'UntUITelaTeste.pas' {UITelaTeste},
+  ClsOrigemDados in 'ClsOrigemDados.pas',
+  Vcl.Forms;
+
 var
   DAO: TDAOPrincipal;
   Descricoes: TStringList;
   i: integer;
+  Tela: TUITelaTeste;
   function Persistir: integer;
   var
     Proc: TFDStoredProc;
@@ -74,14 +81,10 @@ begin
     DAO := TDAOPrincipal.Create('D:\Leandro\Projetos\DAO Delphi 10\DataBase\DATABASE.fdb');
     DAO.Conectar();
     try
-      Alterar(3, 'TERCEIRO TESTE');
-      Descricoes := RecuperarDescricoes;
-      for i := 0 to Descricoes.Count - 1 do begin
-        Writeln(Descricoes[i]);
-      end;
-      Readln;
+      Tela := TUITelaTeste.Create(DAO.NovaOrigemDados('TESTE', 'Select * from teste', EmptyStr, 'ID DESC'));
+      Tela.Show();
     finally
-      DAO.Desconectar();
+      //DAO.Desconectar();
     end;
 
   except
