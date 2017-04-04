@@ -4,16 +4,21 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids, ClsLogicaTeste, Vcl.StdCtrls;
 
 type
   TUITelaTeste = class(TForm)
     DBGrid1: TDBGrid;
+    BtnIncluir: TButton;
+    BtnAlterar: TButton;
+    BtnExcluir: TButton;
     procedure FormShow(Sender: TObject);
+    procedure BtnIncluirClick(Sender: TObject);
   private
     FDados: TDataSource;
+    FLogica: TLogicaTeste;
   public
-    constructor Create(const Dados: TDataSource); reintroduce;
+    constructor Create(const Dados: TDataSource; const Logica: TLogicaTeste); reintroduce;
   end;
 
 var
@@ -25,10 +30,16 @@ implementation
 
 { TUITelaTeste }
 
-constructor TUITelaTeste.Create(const Dados: TDataSource);
+procedure TUITelaTeste.BtnIncluirClick(Sender: TObject);
+begin
+  self.FLogica.Incluir;
+end;
+
+constructor TUITelaTeste.Create(const Dados: TDataSource; const Logica: TLogicaTeste);
 begin
   inherited Create(Application);
   FDados := Dados;
+  FLogica := Logica;
 end;
 
 procedure TUITelaTeste.FormShow(Sender: TObject);

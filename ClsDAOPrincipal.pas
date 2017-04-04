@@ -82,13 +82,11 @@ begin
     FEventosBD := TFDEventAlerter.Create(nil);
     FEventosBD.Connection := FConexao;
     FEventosBD.Options.Synchronize := True;
-    FEventosBD.Options.Timeout := 10000;
-    FEventosBD.OnAlert := DoAlert;
-    FEventosBD.Active := True;
-
     FEventosBD.Names.Clear;
     FEventosBD.Names.Add('TESTE');
-
+//    FEventosBD.Options.Timeout := 10000;
+    FEventosBD.OnAlert := DoAlert;
+    FEventosBD.Active := True;
   end;
 end;
 

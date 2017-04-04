@@ -3,13 +3,17 @@
 	<Transactions>
     <Transaction>2017/01/19 14:18:20.000.184,=C:\Users\Desenvol8\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2017/01/19 15:23:36.000.169,=C:\Users\Desenvol8\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2017/04/04 08:45:31.000.773,D:\Leandro\Projetos\DAO Delphi 10\AcessoDados.dproj=C:\Users\Desenvol8\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2017/04/04 08:45:31.000.773,C:\Users\Desenvol8\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\Leandro\Projetos\DAO Delphi 10\AcessoDados.dproj</Transaction>
     <Transaction>2017/04/04 08:45:42.000.873,=D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas</Transaction>
-    <Transaction>2017/04/04 08:46:00.000.196,D:\Leandro\Projetos\DAO Delphi 10\ClsDAOPrincipal.pas=D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas</Transaction>
-    <Transaction>2017/04/04 14:29:43.564,=D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas</Transaction>
-    <Transaction>2017/04/04 14:30:06.893,D:\Leandro\Projetos\DAO Delphi 10\UntUITelaTeste.pas=D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas</Transaction>
-    <Transaction>2017/04/04 14:30:06.893,D:\Leandro\Projetos\DAO Delphi 10\UntUITelaTeste.dfm=D:\Leandro\Projetos\DAO Delphi 10\Unit1.dfm</Transaction>
-    <Transaction>2017/04/04 14:49:38.764,=D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas</Transaction>
-    <Transaction>2017/04/04 14:49:50.357,D:\Leandro\Projetos\DAO Delphi 10\ClsOrigemDados.pas=D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas</Transaction>
+    <Transaction>2017/04/04 08:46:00.000.196,D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas=D:\Leandro\Projetos\DAO Delphi 10\ClsDAOPrincipal.pas</Transaction>
+    <Transaction>2017/04/04 14:29:43.000.564,=D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas</Transaction>
+    <Transaction>2017/04/04 14:30:06.000.893,D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas=D:\Leandro\Projetos\DAO Delphi 10\UntUITelaTeste.pas</Transaction>
+    <Transaction>2017/04/04 14:30:06.000.893,D:\Leandro\Projetos\DAO Delphi 10\Unit1.dfm=D:\Leandro\Projetos\DAO Delphi 10\UntUITelaTeste.dfm</Transaction>
+    <Transaction>2017/04/04 14:49:38.000.764,=D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas</Transaction>
+    <Transaction>2017/04/04 14:49:50.000.357,D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas=D:\Leandro\Projetos\DAO Delphi 10\ClsOrigemDados.pas</Transaction>
+    <Transaction>2017/04/04 18:37:23.531,=D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas</Transaction>
+    <Transaction>2017/04/04 18:37:43.018,D:\Leandro\Projetos\DAO Delphi 10\ClsLogicaTeste.pas=D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas</Transaction>
+    <Transaction>2017/04/04 18:39:32.945,=D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas</Transaction>
+    <Transaction>2017/04/04 18:39:57.084,D:\Leandro\Projetos\DAO Delphi 10\ClsLogicaDAO.pas=D:\Leandro\Projetos\DAO Delphi 10\Unit1.pas</Transaction>
   </Transactions>
 </BorlandProject>

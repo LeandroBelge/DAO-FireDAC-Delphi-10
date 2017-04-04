@@ -2,7 +2,7 @@ object UITelaTeste: TUITelaTeste
   Left = 0
   Top = 0
   Caption = 'UITelaTeste'
-  ClientHeight = 264
+  ClientHeight = 333
   ClientWidth = 621
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -41,5 +41,30 @@ object UITelaTeste: TUITelaTeste
         Width = 417
         Visible = True
       end>
+  end
+  object BtnIncluir: TButton
+    Left = 32
+    Top = 272
+    Width = 75
+    Height = 25
+    Caption = 'BtnIncluir'
+    TabOrder = 1
+    OnClick = BtnIncluirClick
+  end
+  object BtnAlterar: TButton
+    Left = 120
+    Top = 272
+    Width = 75
+    Height = 25
+    Caption = 'BtnAlterar'
+    TabOrder = 2
+  end
+  object BtnExcluir: TButton
+    Left = 208
+    Top = 272
+    Width = 75
+    Height = 25
+    Caption = 'BtnExcluir'
+    TabOrder = 3
   end
 end
