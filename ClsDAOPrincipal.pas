@@ -32,7 +32,8 @@ type
     FTransacao: TFDTransaction;
     FEventosBD: TFDEventAlerter;
     FOrigensDados: TList<TOrigemDados>;
-    procedure DoAlert(ASender: TFDCustomEventAlerter; const NomeEvento: String; const AArgument: Variant);
+    procedure AtualizaFonteDados(ASender: TFDCustomEventAlerter; const NomeEvento: String; const AArgument: Variant);
+
     function getStringConection: string;
   public
     constructor Create(const PathDataBase: string);
@@ -42,8 +43,9 @@ type
     procedure AssociaTransacao;
     procedure ConfirmaTransacao;
     procedure CancelaTransacao;
-    function NovaOrigemDados(const NomeOrigem, SQLOriginal, Filtros, Ordem: string): TDataSource;
 
+
+    function NovaOrigemDados(const NomeOrigem, SQLOriginal, Filtros, Ordem: string): TDataSource;
     function getConsulta(const QueryStr: string): TFDQuery;
     function getProcedimento(const NomeProc: string): TFDStoredProc;
   end;
@@ -80,13 +82,15 @@ begin
     FConexao.Open(self.getStringConection);
 
     FEventosBD := TFDEventAlerter.Create(nil);
-    FEventosBD.Connection := FConexao;
-    FEventosBD.Options.Synchronize := True;
-    FEventosBD.Names.Clear;
-    FEventosBD.Names.Add('TESTE');
-//    FEventosBD.Options.Timeout := 10000;
-    FEventosBD.OnAlert := DoAlert;
-    FEventosBD.Active := True;
+    with FEventosBD do begin
+      Unregister;
+      Connection := FConexao;
+      Names.Add('TESTE');
+      Options.Kind := 'EVENTS';
+      Options.Synchronize := True;
+      OnAlert := AtualizaFonteDados;
+      Register;
+    end;
   end;
 end;
 
@@ -119,7 +123,7 @@ begin
   inherited;
 end;
 
-procedure TDAOPrincipal.DoAlert(ASender: TFDCustomEventAlerter; const NomeEvento: String; const AArgument: Variant);
+procedure TDAOPrincipal.AtualizaFonteDados(ASender: TFDCustomEventAlerter; const NomeEvento: String; const AArgument: Variant);
 var
   Origem: TOrigemDados;
 begin
@@ -170,11 +174,11 @@ begin
     OrigemDados.Ordem := Ordem;
     OrigemDados.Consulta.Connection := FConexao;
     OrigemDados.Consulta.FetchOptions.CursorKind := ckDynamic;
-    OrigemDados.Consulta.FetchOptions.Unidirectional := true;
+    OrigemDados.Consulta.FetchOptions.Unidirectional := false;
     OrigemDados.Consulta.FetchOptions.Mode := fmOnDemand;
     OrigemDados.Consulta.FetchOptions.RowsetSize := 50;
-    OrigemDados.Consulta.FetchOptions.Items := [fiDetails];
-    OrigemDados.Consulta.FetchOptions.AutoClose := false;
+//    OrigemDados.Consulta.FetchOptions.Items := [fiDetails];
+//    OrigemDados.Consulta.FetchOptions.AutoClose := false;
     OrigemDados.AtualizaOrigem;
     FOrigensDados.Add(OrigemDados);
     Result := OrigemDados.FonteDados;

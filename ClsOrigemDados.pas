@@ -7,7 +7,6 @@ uses
 type
   TOrigemDados = class
   private
-    FDados: TFDMemTable;
   public
     Nome: string;
     SQLOriginal: String;
@@ -55,9 +54,7 @@ begin
   end;
   try
     self.Consulta.Active := False;
-    self.Consulta.SQL.Add(Comando);
-    self.Consulta.Open;
-    FDados.Data := Consulta.Data;
+    self.Consulta.Open(Comando);
   except
     on E: Exception do begin
       raise Exception.Create('Erro inesperado ao realizar a operação.');
@@ -74,9 +71,8 @@ begin
   Filtros := EmptyStr;
   Ordem := EmptyStr;
   Consulta := TFDQuery.Create(Consulta);
-  FDados := TFDMemTable.Create(FDados);
   FonteDados := TDataSource.Create(FonteDados);
-  FonteDados.DataSet := FDados;
+  FonteDados.DataSet := Consulta;
 end;
 
 destructor TOrigemDados.Destroy;

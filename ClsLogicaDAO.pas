@@ -9,8 +9,8 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    procedure Incluir;
-    procedure Alterar;
+    procedure Persistir(const Codigo: integer; const Descricao: string);
+    procedure Excluir(const Codigo: integer);
     function getOrigemDados: TDataSource;
   end;
 implementation
@@ -21,27 +21,6 @@ uses
 
 
 { TLogicaDAO }
-
-procedure TLogicaDAO.Alterar;
-const
-  COMANDO_SQL = 'update teste set descricao = %s where id = %d';
-var
-  comando: TFDQuery;
-begin
-  FDAO.AssociaTransacao;
-  try
-    comando := FDAO.getConsulta(Format(COMANDO_SQL, [QuotedStr('DESCRIÇÃO'), 3]));
-    try
-      comando.ExecSQL;
-    finally
-      comando.Free;
-    end;
-    FDAO.ConfirmaTransacao;
-  finally
-    FDAO.CancelaTransacao;
-  end;
-end;
-
 constructor TLogicaDAO.Create;
 begin
   FDAO := TDAOPrincipal.Create('D:\Leandro\Projetos\DAO Delphi 10\DataBase\DATABASE.fdb');
@@ -55,27 +34,46 @@ begin
   inherited;
 end;
 
+procedure TLogicaDAO.Excluir(const Codigo: integer);
+var
+  proc: TFDStoredProc;
+begin
+  FDAO.AssociaTransacao;
+  try
+    proc := FDAO.getProcedimento('EXCLUIR');
+    try
+      proc.ParamByName('ID').Value := Codigo;
+      proc.ExecProc;
+    finally
+      proc.Free;
+    end;
+    FDAO.ConfirmaTransacao;
+  finally
+    FDAO.CancelaTransacao;
+  end;
+end;
+
 function TLogicaDAO.getOrigemDados: TDataSource;
 begin
   Result := FDAO.NovaOrigemDados('TESTE', 'Select * from teste', EmptyStr, 'ID DESC');
 end;
 
-procedure TLogicaDAO.Incluir;
+procedure TLogicaDAO.Persistir(const Codigo: integer; const Descricao: string);
 var
-  Proc: TFDStoredProc;
+  proc: TFDStoredProc;
 begin
   FDAO.AssociaTransacao;
   try
-    Proc := FDAO.getProcedimento('PERSISTIR');
+    proc := FDAO.getProcedimento('PERSISTIR');
     try
-      Proc.ParamByName('ID').Value := null;
-      proc.ParamByName('DESCRICAO').AsString := 'QUARTO TESTE';
+      proc.ParamByName('ID').Value := Codigo;
+      proc.ParamByName('DESCRICAO').AsString := Descricao;
       proc.ExecProc;
     finally
-      Proc.Free;
+      proc.Free;
     end;
     FDAO.ConfirmaTransacao;
-  except
+  finally
     FDAO.CancelaTransacao;
   end;
 end;

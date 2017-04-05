@@ -12,6 +12,8 @@ type
     destructor Destroy; override;
     procedure ExibirTela;
     procedure Incluir;
+    procedure Alterar(const Codigo: integer);
+    procedure Excluir(const Codigo: integer);
 
   end;
 implementation
@@ -19,6 +21,11 @@ implementation
 { TLogicaTeste }
 
 uses UntUITelaTeste;
+
+procedure TLogicaTeste.Alterar(const Codigo: integer);
+begin
+  FDAO.Persistir(Codigo, 'TESTE ALTERAÇÃO');
+end;
 
 constructor TLogicaTeste.Create;
 begin
@@ -29,6 +36,11 @@ destructor TLogicaTeste.Destroy;
 begin
   FDAO.Free;
   inherited;
+end;
+
+procedure TLogicaTeste.Excluir(const Codigo: integer);
+begin
+  FDAO.Excluir(Codigo);
 end;
 
 procedure TLogicaTeste.ExibirTela;
@@ -45,7 +57,7 @@ end;
 
 procedure TLogicaTeste.Incluir;
 begin
-  FDAO.Incluir;
+  FDAO.Persistir(0, 'TESTE INCLUSÃO');
 end;
 
 end.

@@ -14,9 +14,12 @@ type
     BtnExcluir: TButton;
     procedure FormShow(Sender: TObject);
     procedure BtnIncluirClick(Sender: TObject);
+    procedure BtnAlterarClick(Sender: TObject);
+    procedure BtnExcluirClick(Sender: TObject);
   private
     FDados: TDataSource;
     FLogica: TLogicaTeste;
+    function getCodigoSelecionado: integer;
   public
     constructor Create(const Dados: TDataSource; const Logica: TLogicaTeste); reintroduce;
   end;
@@ -29,6 +32,22 @@ implementation
 {$R *.dfm}
 
 { TUITelaTeste }
+
+procedure TUITelaTeste.BtnAlterarClick(Sender: TObject);
+var
+  Codigo: integer;
+begin
+  Codigo := self.getCodigoSelecionado;
+  if Codigo > 0 then self.FLogica.Alterar(Codigo);
+end;
+
+procedure TUITelaTeste.BtnExcluirClick(Sender: TObject);
+var
+  Codigo: integer;
+begin
+  Codigo := self.getCodigoSelecionado;
+  if Codigo > 0 then self.FLogica.Excluir(Codigo);
+end;
 
 procedure TUITelaTeste.BtnIncluirClick(Sender: TObject);
 begin
@@ -45,6 +64,11 @@ end;
 procedure TUITelaTeste.FormShow(Sender: TObject);
 begin
   DBGrid1.DataSource := FDados;
+end;
+
+function TUITelaTeste.getCodigoSelecionado: integer;
+begin
+  Result := DBGrid1.DataSource.DataSet.FieldByName('ID').Value;
 end;
 
 end.
